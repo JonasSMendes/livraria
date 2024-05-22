@@ -138,7 +138,7 @@ public class ExibeLivraria {
                 .sorted()
                 .collect(Collectors.toList());
 
-        autores.forEach(l -> System.out.println("Autor: " + l));
+        autores.forEach(l -> System.out.println("Autor : " + l));
     }
 
     private void autoresQueEstavamVivos() {
