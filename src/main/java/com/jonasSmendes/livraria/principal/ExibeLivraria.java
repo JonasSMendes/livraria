@@ -8,6 +8,7 @@ import com.jonasSmendes.livraria.service.ConverteDados;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ExibeLivraria {
 
@@ -44,7 +45,10 @@ public class ExibeLivraria {
             ########### Livraria #############
             
             1 - Buscar livro pelo titulo
-            2-  Exibir livros listados
+            2 - Exibir livros listados
+            3 - Exibir autores cadastrados
+            4 - Exibir autores vivos em determinado ano
+            5 - Listar livros em um idioma
             
             0 - sair.
             
@@ -70,12 +74,22 @@ public class ExibeLivraria {
                     case 2:
                         exibirListaDeLivros();
                         break;
+                    case 3:
+                        exibirAutoresLivro();
+                        break;
+                    case 4:
+                        autoresQueEstavamVivos();
+                        break;
+                    case 5:
+                        listaLivrosPorIdioma();
+                        break;
                     default:
                         System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
                         break;
                 }
         }
     }
+
 
 
 
@@ -107,6 +121,7 @@ public class ExibeLivraria {
         }
     }
 
+
     private void exibirListaDeLivros(){
        livro = repository.findAll();
        livro.stream()
@@ -114,4 +129,42 @@ public class ExibeLivraria {
                .forEach(System.out::println);
 
     }
+
+    private void exibirAutoresLivro(){
+        livro = repository.findAll();
+        List<String> autores = livro.stream()
+                .map(Livro::getNomeAutor)
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        autores.forEach(l -> System.out.println("Autor: " + l));
+    }
+
+    private void autoresQueEstavamVivos() {
+        System.out.println("quer ver os autores vivos que de ano? ");
+        var autoresvivos = scanner.nextInt();
+        scanner.nextLine();
+
+        livro = repository.anoDeAutoresVivos(autoresvivos);
+
+        livro.stream()
+                .sorted(Comparator.comparing(Livro::getTituloLivro))
+                .forEach(System.out::println);
+    }
+
+    private void listaLivrosPorIdioma() {
+        System.out.println("qual linguagem voce procura? user caracter Ex: pt, en ...");
+        var linguagemEscolhida = scanner.nextLine();
+
+        livro = repository.findAll();
+
+        List<Livro> livrosEscolhidosPorLinguagem = livro.stream()
+                .filter(l -> l.getLinguagem().contains(linguagemEscolhida))
+                .sorted(Comparator.comparing(Livro::getNumeroDeDownload))
+                .collect(Collectors.toList());
+
+        livrosEscolhidosPorLinguagem.forEach(System.out::println);
+    }
+
 }

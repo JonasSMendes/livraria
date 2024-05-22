@@ -95,8 +95,11 @@ public class Livro {
                 #########################
                 titulo: %s
                 autor: %s
+                ano de nascimento: %s
+                ano de falecimento: %s
                 linguagem: %s
                 numero de download: %s
-                """.formatted(tituloLivro, nomeAutor, linguagem, numeroDeDownload);
+                
+                """.formatted(tituloLivro, nomeAutor,dataDeAniversario,dataDefalecimento, linguagem, numeroDeDownload);
     }
 }
